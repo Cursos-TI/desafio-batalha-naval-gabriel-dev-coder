@@ -1,40 +1,79 @@
 #include <stdio.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+#define TAM_TABULEIRO 10
+#define TAM_NAVIO 3
+#define AGUA 0
+#define NAVIO 3
+
+// Função para inicializar o tabuleiro com água (valor 0)
+void inicializarTabuleiro(int tabuleiro[TAM_TABULEIRO][TAM_TABULEIRO]) {
+    for (int i = 0; i < TAM_TABULEIRO; i++) {
+        for (int j = 0; j < TAM_TABULEIRO; j++) {
+            tabuleiro[i][j] = AGUA;
+        }
+    }
+}
+
+// Função para verificar se é possível posicionar um navio
+int podePosicionar(int tabuleiro[TAM_TABULEIRO][TAM_TABULEIRO], int linha, int coluna, int vertical) {
+    if (vertical) {
+        if (linha + TAM_NAVIO > TAM_TABULEIRO) return 0;
+        for (int i = 0; i < TAM_NAVIO; i++) {
+            if (tabuleiro[linha + i][coluna] != AGUA) return 0;
+        }
+    } else {
+        if (coluna + TAM_NAVIO > TAM_TABULEIRO) return 0;
+        for (int i = 0; i < TAM_NAVIO; i++) {
+            if (tabuleiro[linha][coluna + i] != AGUA) return 0;
+        }
+    }
+    return 1;
+}
+
+// Função para posicionar o navio no tabuleiro
+void posicionarNavio(int tabuleiro[TAM_TABULEIRO][TAM_TABULEIRO], int linha, int coluna, int vertical) {
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        if (vertical)
+            tabuleiro[linha + i][coluna] = NAVIO;
+        else
+            tabuleiro[linha][coluna + i] = NAVIO;
+    }
+}
+
+// Função para exibir o tabuleiro
+void exibirTabuleiro(int tabuleiro[TAM_TABULEIRO][TAM_TABULEIRO]) {
+    printf("TABULEIRO:\n\n");
+    for (int i = 0; i < TAM_TABULEIRO; i++) {
+        for (int j = 0; j < TAM_TABULEIRO; j++) {
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+}
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+    int tabuleiro[TAM_TABULEIRO][TAM_TABULEIRO];
+    inicializarTabuleiro(tabuleiro);
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+    // Coordenadas iniciais fixas para os dois navios
+    int linha1 = 2, coluna1 = 4; // Navio horizontal
+    int linha2 = 5, coluna2 = 7; // Navio vertical
 
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
+    // Verificação e posicionamento
+    if (podePosicionar(tabuleiro, linha1, coluna1, 0)) {
+        posicionarNavio(tabuleiro, linha1, coluna1, 0);
+    } else {
+        printf("Erro: Não foi possível posicionar o navio horizontal.\n");
+    }
 
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    if (podePosicionar(tabuleiro, linha2, coluna2, 1)) {
+        posicionarNavio(tabuleiro, linha2, coluna2, 1);
+    } else {
+        printf("Erro: Não foi possível posicionar o navio vertical.\n");
+    }
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
+    // Exibição final do tabuleiro
+    exibirTabuleiro(tabuleiro);
 
     return 0;
 }
